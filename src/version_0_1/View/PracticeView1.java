@@ -1,4 +1,4 @@
-package View;
+package version_0_1.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class PracticeView1 {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         jFrame.setTitle("Practica de Vistas 1");
-        jFrame.add(new JLabel("Practice View 1"));
+        jFrame.add(new JLabel("Practice version_0_1.View 1"));
 
         iniciarMenu();
 
@@ -80,5 +80,4 @@ public class PracticeView1 {
 
         jFrame.setJMenuBar(menuBar);
     }
-
 }

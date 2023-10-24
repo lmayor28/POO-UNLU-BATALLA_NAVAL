@@ -1,5 +1,5 @@
-package Gui;
-import View.*;
+package version_0_1.Gui;
+import version_0_1.View.*;
 
 import javax.swing.*;
 
@@ -9,7 +9,7 @@ public class Main {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                PracticeView1 view = new PracticeView1();
+                View view = new View();
             }
         });
 
