@@ -1,0 +1,7 @@
+Diferentes ideas para el diseño del tablero:
+
+  Dos tableros por jugador: Esta es la forma más tradicional de jugar a la batalla naval. Cada jugador tiene un tablero para sus propios barcos y otro para rastrear sus disparos al enemigo. En términos de programación, esto podría implementarse como dos matrices bidimensionales por jugador. Una matriz representaría el tablero del jugador (donde están sus barcos) y la otra representaría el tablero del enemigo (donde ha disparado el jugador).
+
+  Un tablero por jugador con visibilidad: En este enfoque, cada jugador tiene un solo tablero, pero las celdas del tablero tienen un atributo de “visibilidad” que determina si el contenido de la celda (es decir, si hay un barco o no) es visible para el otro jugador. Esto podría implementarse como una matriz bidimensional de objetos “Celda”, donde cada objeto Celda tiene atributos para almacenar si contiene un barco y si es visible para el otro jugador.
+
+  Un solo tablero con dos vistas: En este enfoque, hay un solo tablero que ambos jugadores comparten, pero cada jugador ve una “vista” diferente del tablero dependiendo de si es su turno o no. Esto podría implementarse como una matriz bidimensional de objetos “Celda”, similar al enfoque de visibilidad, pero en lugar de tener dos matrices separadas para cada jugador, hay una sola matriz que ambos jugadores comparten.
