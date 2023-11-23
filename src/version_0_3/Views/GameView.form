@@ -55,6 +55,60 @@
               <text value="Cargar Tablero"/>
             </properties>
           </component>
+          <component id="95837" class="javax.swing.JButton" binding="CambiarPanel">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value="Button"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="41d3f" binding="JScrollPanePrueba" layout-manager="CardLayout" hgap="0" vgap="0">
+        <constraints>
+          <card name="Card1"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <tabbedpane id="c3310" binding="tabbedPane1" default-binding="true">
+            <constraints>
+              <card name="Card1"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="6267" layout-manager="CardLayout" hgap="0" vgap="0">
+                <constraints>
+                  <tabbedpane title="Principal"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="2cbb7" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
+                    <constraints>
+                      <card name="Card2"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <scrollpane id="70bc1">
+                    <constraints>
+                      <card name="Card1"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="20623" class="javax.swing.JList" binding="list1" default-binding="true">
+                        <constraints/>
+                        <properties/>
+                      </component>
+                    </children>
+                  </scrollpane>
+                </children>
+              </grid>
+            </children>
+          </tabbedpane>
         </children>
       </grid>
     </children>

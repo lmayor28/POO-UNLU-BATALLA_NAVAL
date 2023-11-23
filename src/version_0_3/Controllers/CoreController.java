@@ -26,10 +26,6 @@ public class CoreController implements Observer {
         if (arg instanceof CellPoint point) {
             //board.setCell(point.getX(), point.getY(), point.getValue());
 
-
-
-
-
             view.update(new Cell(point.getX(), point.getY(), board.guess(point.getX(), point.getY()) ));
 
         }

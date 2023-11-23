@@ -1,43 +1,39 @@
-package version_0_3.Views;
+package version_0_4.Views;
 
-import version_0_3.Models.Clases.Board.Cell;
-import version_0_3.Models.Clases.Board.CellPoint;
-import version_0_3.Subject;
+//import version_0_4.Models.Clases.Board.Cell;
+import version_0_4.Clases.Jugador;
+import version_0_4.Models.Board.*;
+import version_0_4.Observer.*;
 
 import javax.swing.*;
+import javax.swing.JButton;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//import java.sql.SQLOutput;
 import java.util.ArrayList;
 
-public class GameView extends Subject {
-    public JPanel panel1;
-    private JTable BOARD;
-    private JTable PUBLIC_BOARD;
-    private JButton LoadBoard;
-    private JPanel JScrollPanePrueba;
-    private JButton CambiarPanel;
-    private JTabbedPane tabbedPane1;
-    private JList list1;
-    private JProgressBar progressBar1;
+public class BoardView extends Subject {
 
+    JTable BOARD;
+    JTable PUBLIC_BOARD;
+    Jugador jugador;
 
-    public GameView() {
-        CambiarPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Aca se cambia entre paneles mediante la disposicion que tiene Panel 1.
-                panel1.transferFocus();
-            }
-        });
+    DisplayView view;
+
+    Integer cantidadBarcos = 0;
+
+    private Integer cantidadDEBarcosRestantes = 15;
+
+    public BoardView(JTable Board, JTable Public_Board, Jugador jugador, Observer observer, DisplayView view) {
+        BOARD = Board;
+        PUBLIC_BOARD = Public_Board;
+        this.jugador = jugador;
+        this.attach(observer);
+        this.view = view;
     }
-
-
 
     public void setBOARD (ArrayList<ArrayList<Cell>> board) {
         DefaultTableModel model = new DefaultTableModel(board.size(), board.get(0).size()){
@@ -59,7 +55,7 @@ public class GameView extends Subject {
         BOARD.setDefaultRenderer(Object.class, centerRenderer);
         BOARD.setModel(model);
 
-        //PUBLIC_BOARD.setDefaultRenderer(Object.class, centerRenderer);
+        //PUBLIC_BOARD.setDefaultRenderer(Object.class, centerRenderer);cellSize
         PUBLIC_BOARD.setModel(model2);
 
         for (ArrayList<Cell> row : board) {
@@ -83,30 +79,24 @@ public class GameView extends Subject {
             column2.setPreferredWidth(cellSize);
         }
 
-        //JScrollPane scrollPane = new JScrollPane(BOARD);
-        //JScrollPane scrollPane2 = new JScrollPane(PUBLIC_BOARD);
 
-        //BOARD.setFillsViewportHeight(true);
-        //BOARD.setFillsViewportHeight(true);
-
-        //PUBLIC_BOARD.setFillsViewportHeight(true);
-        //PUBLIC_BOARD.setFillsViewportHeight(true);
-
-        //scrollPane.setPreferredSize((new Dimension(800, 600)));
-        //scrollPane2.setPreferredSize((new Dimension(800, 600)));
-
-        PUBLIC_BOARD.addMouseListener(new MouseAdapter() {
+        BOARD.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e){
-                int row = PUBLIC_BOARD.rowAtPoint(e.getPoint());
-                int col = PUBLIC_BOARD.columnAtPoint(e.getPoint());
-                System.out.println("Click at Cell:  " + row + " " + col + " " + PUBLIC_BOARD.getValueAt(row, col));
-                notifyObservers(new CellPoint(row, col));
+                if (cantidadDEBarcosRestantes < 0){
+                    return;
+                }
+                int row = BOARD.rowAtPoint(e.getPoint());
+                int col = BOARD.columnAtPoint(e.getPoint());
+                System.out.println("Click at Cell:  " + row + " " + col + " " + BOARD.getValueAt(row, col));
+                notifyObservers(new CellPoint(col, row, jugador));
+                cantidadDEBarcosRestantes--;
+                view.actualizarCantidadDeBarcos(cantidadDEBarcosRestantes);
             }
         });
 
 
         // TODO: Ver que pasa con este codigo de porque no funciona y creo que se cambia el setDefaultRender en alguna otra parte.
-        PUBLIC_BOARD.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        BOARD.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -116,6 +106,9 @@ public class GameView extends Subject {
                 switch (value.toString()) {
                     case "E":
                         c.setBackground(Color.GREEN);
+                        break;
+                    case "B":
+                        c.setBackground(Color.orange);
                         break;
                     case "X":
                         c.setBackground(Color.BLUE);
@@ -136,25 +129,8 @@ public class GameView extends Subject {
 
     }
 
+    public void setBoatAtCell(Cell cell2) {
 
-
-
-
-    public void setButtonAction(ActionListener action) {
-        LoadBoard.addActionListener(action);
-    }
-
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-
-
-
-
-    }
-
-
-    public void update(Cell newCell){
-        PUBLIC_BOARD.setValueAt(newCell.getState(), newCell.getX(), newCell.getY());
+        BOARD.setValueAt(cell2.getState(), cell2.getY(), cell2.getX());
     }
 }
