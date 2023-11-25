@@ -25,11 +25,11 @@ public class CoreModel extends Subject implements Observer, Model {
         if (LISTA_DE_JUGADORES.contains(jugador)){
             return;
         }
-
         LISTA_DE_JUGADORES.add(jugador);
         CANTIDAD_BARCOS.put(jugador, 0);
         LISTA_DE_TABLEROS.put(jugador, new Board(10, 10, jugador));
 
+        System.out.println("Jugador cargado, cantidad de TABLEROS: " + LISTA_DE_TABLEROS.size());
     }
 
     public ArrayList<ArrayList<Cell>> getTablero(Jugador jugador){
