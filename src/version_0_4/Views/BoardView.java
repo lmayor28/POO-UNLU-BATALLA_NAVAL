@@ -1,6 +1,7 @@
 package version_0_4.Views;
 
 //import version_0_4.Models.Clases.Board.Cell;
+import version_0_4.Clases.CeldaObserver;
 import version_0_4.Clases.Jugador;
 import version_0_4.Models.Board.*;
 import version_0_4.Observer.*;
@@ -138,19 +139,20 @@ public class BoardView extends Subject {
 
 public class BoardView extends Subject {
 
-    private JTable board;
-    private JTable publicBoard;
+    private final JTable board;
+    private final JTable publicBoard;
     private Jugador jugador;
-    private DisplayView view;
-    private Integer cantidadBarcos = 0;
-    private Integer cantidadDEBarcosRestantes = 15;
+    private final DisplayView view;
+    private Integer cantidadDEBarcosRestantes = 5;
 
     public BoardView(JTable board, JTable publicBoard, Jugador jugador, Observer observer, DisplayView view) {
         this.board = board;
         this.publicBoard = publicBoard;
         //TODO: Borra linea
-        System.out.println("Board and public board" + board + publicBoard);
+        //System.out.println("Board and public board" + board + publicBoard);
         this.jugador = jugador;
+
+        // Tiene como observadores al Controlador.
         this.attach(observer);
         this.view = view;
     }
@@ -160,12 +162,13 @@ public class BoardView extends Subject {
         setTable(this.publicBoard, board);
         setMouseListener(this.board);
         setCellRenderer(this.board);
+
+        setMouseListenerPublicBoard(this.publicBoard);
+        setCellRenderer(this.publicBoard);
     }
 
     private void setTable(JTable table, ArrayList<ArrayList<Cell>> board) {
         DefaultTableModel model = createTableModel(board);
-        // TODO: Borra linea.
-        System.out.println("TAble en setTable: " + table);
         table.setModel(model);
         setTableProperties(table, board);
     }
@@ -201,13 +204,42 @@ public class BoardView extends Subject {
 
     private void setMouseListener(JTable table) {
         table.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e){
+            public void mouseClicked(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int col = table.columnAtPoint(e.getPoint());
+                if (!view.consultarPonerBarcos()) {
+                    System.out.println("No se puede poner barcos");
+                    return;
+                }
+
+                System.out.println("Click at Cell:  " + row + " " + col + " " + table.getValueAt(row, col) + " Hecho por: " + jugador.getNombre());
+                notifyObservers(new CellPoint(row, col, jugador));
+                cantidadDEBarcosRestantes--;
+                view.actualizarCantidadDeBarcos(cantidadDEBarcosRestantes);
+
+                if (!view.consultarPonerBarcos()){
+                    view.siguienteButton.setEnabled(true);
+                }
+
+            }
+        });
+    }
+
+    private void setMouseListenerPublicBoard(JTable table) {
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (!view.turnoDelJugador().equals(view.getJugador())){
+                    board.setEnabled(false);
+                    return;
+                }
                 int row = table.rowAtPoint(e.getPoint());
                 int col = table.columnAtPoint(e.getPoint());
                 System.out.println("Click at Cell:  " + row + " " + col + " " + table.getValueAt(row, col));
-                notifyObservers(new CellPoint(col, row, jugador));
-                cantidadDEBarcosRestantes--;
-                view.actualizarCantidadDeBarcos(cantidadDEBarcosRestantes);
+                //notifyObservers(new CeldaObserver);
+                //table.setValueAt("M", row, col);
+                Cell cell = new Cell(row, col, "M");
+                CeldaObserver celdaObserver = new CeldaObserver( row, col, "", view.getJugador(),CeldaObserver.TipoCambio.GUESS);
+                notifyObservers(celdaObserver);
             }
         });
     }
@@ -235,14 +267,21 @@ public class BoardView extends Subject {
                         break;
 
                 }
+
+                ((JLabel) c).setHorizontalAlignment(JLabel.CENTER);
+
+
                 return c;
             }
         });
     }
 
     public void setBoatAtCell(Cell cell2) {
+        board.setValueAt(cell2.getState(), cell2.getX(), cell2.getY());
+    }
 
-        board.setValueAt(cell2.getState(), cell2.getY(), cell2.getX());
+    public void setGuessPublicBoard(Cell cell){
+        publicBoard.setValueAt(cell.getState(), cell.getX(), cell.getY());
     }
 }
 

@@ -89,6 +89,10 @@ public class Board {
         return BOARD;
     }
 
+    public ArrayList<ArrayList<Cell>> getPublicBoard() {
+        return PUBLIC_BOARD;
+    }
+
     public String getCellContent(int i, int j, Jugador playerOwnership){
         if (playerOwnership.equals(this.playerOwnership)){
             return BOARD.get(i).get(j).getState();

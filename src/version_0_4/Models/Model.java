@@ -1,5 +1,6 @@
 package version_0_4.Models;
 
+import version_0_4.Clases.CeldaObserver;
 import version_0_4.Clases.Jugador;
 import version_0_4.Models.Board.Cell;
 import version_0_4.Models.Board.CellPoint;
@@ -14,5 +15,11 @@ public interface Model {
     public void cargarJugador(Jugador jugador);
 
 
+    public boolean consultarPonerBarcos(Jugador jugador);
 
+    public void jugardorReady(Jugador jugador);
+
+    void guess(CeldaObserver celda);
+
+    Jugador getTURNO_DEL_JUGADOR();
 }
